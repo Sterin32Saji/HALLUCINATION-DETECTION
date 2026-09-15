@@ -1,0 +1,35 @@
+{
+  "n_test_samples": 30,
+  "custom": {
+    "accuracy": 0.7333333333333333,
+    "precision": 0.7777777777777778,
+    "recall": 0.7777777777777778,
+    "f1": 0.7777777777777778
+  },
+  "hybrid": {
+    "accuracy": 0.7,
+    "precision": 0.7647058823529411,
+    "recall": 0.7222222222222222,
+    "f1": 0.7428571428571429
+  },
+  "bootstrap": {
+    "iterations": 5000,
+    "custom_f1_95ci": [
+      0.6,
+      0.9047619047619048
+    ],
+    "hybrid_f1_95ci": [
+      0.5515673981191223,
+      0.8823529411764706
+    ],
+    "difference_f1_95ci": [
+      -0.1622183066775097,
+      0.23462583148558738
+    ]
+  },
+  "paired_test": {
+    "disagreements_model_a_wrong_model_b_right": 4,
+    "disagreements_model_a_right_model_b_wrong": 5,
+    "mcnemar_exact_p_value": 1.0
+  }
+}

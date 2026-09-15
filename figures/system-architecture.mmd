@@ -1,0 +1,59 @@
+flowchart TB
+  %% Technical RAG Hallucination Detection System Architecture
+  %% Paste this file into https://mermaid.live to render or export as SVG/PNG.
+
+  classDef stage fill:#eaf0f7,stroke:#c9d5e4,stroke-width:1px,color:#172033;
+  classDef process fill:#ffffff,stroke:#41516a,stroke-width:1.5px,color:#172033;
+  classDef data fill:#fff7df,stroke:#9a6a00,stroke-width:1.5px,color:#172033;
+  classDef model fill:#f4effb,stroke:#6b3fa0,stroke-width:1.5px,color:#172033;
+  classDef custom fill:#eef8f0,stroke:#2f6b3f,stroke-width:1.5px,color:#172033;
+  classDef output fill:#fff7df,stroke:#9a6a00,stroke-width:1.5px,color:#172033;
+
+  subgraph S1["Offline corpus, dataset, and index construction"]
+    direction LR
+    A["Technical PDFs<br/>NIST, OWASP, RFC, AWS"]:::data
+    B["Chunking<br/>800-token chunks<br/>120-token overlap"]:::process
+    C["Embeddings<br/>Sentence-BERT<br/>384 dimensions"]:::process
+    D["FAISS vector index<br/>7,513 chunks<br/>semantic search"]:::process
+    E["Generated QA records<br/>question, answer,<br/>evidence, metadata"]:::data
+    F["Human-labelled benchmark<br/>300 records<br/>split 210 / 45 / 45"]:::data
+
+    A --> B --> C --> D
+    B --> E --> F
+  end
+
+  subgraph S2["Runtime RAG answering"]
+    direction LR
+    G["User question<br/>uploaded-document query"]:::data
+    H["Retriever<br/>top-k evidence<br/>k = 3 or 5"]:::process
+    I["Answer generator<br/>Ollama Qwen 2.5:7B<br/>temperature = 0.1"]:::process
+    J["RAG output<br/>question + retrieved evidence<br/>+ generated answer"]:::data
+
+    G --> H --> I --> J
+  end
+
+  subgraph S3["Detection, supervised models, and user-facing output"]
+    direction LR
+    K["Baseline detector tracks<br/>LLM judge<br/>RAGAS faithfulness<br/>SelfCheck-style consistency<br/>retrieval similarity"]:::model
+    L["Hybrid detector<br/>Logistic Regression<br/>over detector outputs<br/>held-out F1 = 0.8571"]:::model
+    M["Custom feature extractor<br/>semantic, lexical,<br/>technical-consistency,<br/>metadata features"]:::custom
+    N["Custom detector<br/>Logistic Regression<br/>held-out F1 = 0.8000"]:::custom
+    O["Risk score<br/>Low / Medium / High / Critical<br/>interface bands"]:::output
+    P["Frontend output<br/>answer, evidence,<br/>risk details"]:::process
+
+    K --> L
+    M --> N
+    L --> O
+    N --> O
+    K -. "RAGAS and similarity scores<br/>also contribute to dashboard risk" .-> O
+    O --> P
+  end
+
+  D -. "runtime vector store" .-> H
+  J --> K
+  J --> M
+  F -. "supervised training labels" .-> L
+  F -. "supervised training labels" .-> N
+  F -. "held-out test evaluation" .-> K
+  F -. "held-out test evaluation" .-> L
+  F -. "held-out test evaluation" .-> N

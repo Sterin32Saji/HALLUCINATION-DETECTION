@@ -1,0 +1,102 @@
+{
+  "best_model": "logistic_regression",
+  "best_metrics": {
+    "accuracy": 0.7333333333333333,
+    "precision": 0.7777777777777778,
+    "recall": 0.7777777777777778,
+    "f1": 0.7777777777777778
+  },
+  "roc_auc": 0.787037037037037,
+  "model_path": "/Users/sterinsaji/Desktop/rag-research/notebooks/final_all_dataset/custom_detector/artifacts/custom_hallucination_detector.pkl",
+  "n_train": 120,
+  "n_test": 30,
+  "top_features": [
+    {
+      "feature": "num__unsupported_word_ratio",
+      "importance": 1.0603030685689114
+    },
+    {
+      "feature": "num__number_match",
+      "importance": 0.9424959452679683
+    },
+    {
+      "feature": "num__evidence_token_count",
+      "importance": 0.8267308097065963
+    },
+    {
+      "feature": "num__rag_answer_token_count",
+      "importance": 0.8231199936832854
+    },
+    {
+      "feature": "num__rag_entity_count",
+      "importance": 0.8101913396372807
+    },
+    {
+      "feature": "cat__source_doc_docs/NIST.SP.800-171r3.pdf",
+      "importance": 0.7152346090657831
+    },
+    {
+      "feature": "cat__source_doc_docs/rfc9110.pdf",
+      "importance": 0.6922895063352482
+    },
+    {
+      "feature": "num__length_ratio",
+      "importance": 0.5735155884115185
+    },
+    {
+      "feature": "num__date_mismatch",
+      "importance": 0.5343270682319426
+    },
+    {
+      "feature": "num__jaccard_similarity",
+      "importance": 0.5086324475485215
+    },
+    {
+      "feature": "num__technical_term_extra",
+      "importance": 0.46348892236380895
+    },
+    {
+      "feature": "num__answer_token_count",
+      "importance": 0.45242612682697625
+    },
+    {
+      "feature": "num__rag_number_count",
+      "importance": 0.4441747450039772
+    },
+    {
+      "feature": "cat__question_type_identifier",
+      "importance": 0.4346419116487625
+    },
+    {
+      "feature": "num__technical_term_overlap",
+      "importance": 0.40917455134274916
+    }
+  ],
+  "classification_report": {
+    "0": {
+      "precision": 0.6666666666666666,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.6666666666666666,
+      "support": 12.0
+    },
+    "1": {
+      "precision": 0.7777777777777778,
+      "recall": 0.7777777777777778,
+      "f1-score": 0.7777777777777778,
+      "support": 18.0
+    },
+    "accuracy": 0.7333333333333333,
+    "macro avg": {
+      "precision": 0.7222222222222222,
+      "recall": 0.7222222222222222,
+      "f1-score": 0.7222222222222222,
+      "support": 30.0
+    },
+    "weighted avg": {
+      "precision": 0.7333333333333333,
+      "recall": 0.7333333333333333,
+      "f1-score": 0.7333333333333333,
+      "support": 30.0
+    }
+  }
+}

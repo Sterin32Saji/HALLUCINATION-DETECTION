@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Detector Debug</title>
+    <link rel="stylesheet" href="/custom-detector/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <h1>Custom Hallucination Detector Debug</h1>
+        <p>Standalone test page for your independent custom detector model.</p>
+        <p class="small">Node API: <span id="api-url-label">http://127.0.0.1:5055</span></p>
+      </header>
+
+      <section class="card">
+        <h2>Single Sample (JSON)</h2>
+        <form id="single-form">
+          <textarea id="single-json" rows="16"></textarea>
+          <button type="submit">Predict Single</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Batch JSONL File</h2>
+        <form id="jsonl-form">
+          <input id="jsonl-file" type="file" accept=".jsonl" />
+          <button type="submit">Predict JSONL</button>
+        </form>
+      </section>
+
+      <section class="card status" id="status-box" hidden>
+        <h2>Progress</h2>
+        <p id="status-text">Preparing request...</p>
+      </section>
+
+      <section class="card" id="result-box" hidden>
+        <h2>Result</h2>
+        <pre id="result-output"></pre>
+      </section>
+
+      <section class="card" id="error-box" hidden>
+        <h2>Error</h2>
+        <pre id="error-output"></pre>
+      </section>
+    </div>
+
+    <script src="/custom-detector/app.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+{
+  "model": "logistic_regression",
+  "validation_metrics": {
+    "n": 45,
+    "accuracy": 0.6888888888888889,
+    "precision": 0.76,
+    "recall": 0.7037037037037037,
+    "f1": 0.7307692307692307,
+    "specificity": 0.6666666666666666,
+    "false_positive_rate": 0.3333333333333333,
+    "false_negative_rate": 0.2962962962962963,
+    "tp": 19,
+    "tn": 12,
+    "fp": 6,
+    "fn": 8
+  },
+  "test_metrics": {
+    "n": 45,
+    "accuracy": 0.8444444444444444,
+    "precision": 0.9545454545454546,
+    "recall": 0.7777777777777778,
+    "f1": 0.8571428571428571,
+    "specificity": 0.9444444444444444,
+    "false_positive_rate": 0.05555555555555555,
+    "false_negative_rate": 0.2222222222222222,
+    "tp": 21,
+    "tn": 17,
+    "fp": 1,
+    "fn": 6
+  },
+  "model_path": "/Users/sterinsaji/Desktop/rag-research/notebooks/new_300_question_set/300_question_from_each/analysis_results/models/hybrid_detector_model.pkl",
+  "n_train": 210,
+  "n_val": 45,
+  "n_test": 45,
+  "classification_report": {
+    "0": {
+      "precision": 0.7391304347826086,
+      "recall": 0.9444444444444444,
+      "f1-score": 0.8292682926829268,
+      "support": 18.0
+    },
+    "1": {
+      "precision": 0.9545454545454546,
+      "recall": 0.7777777777777778,
+      "f1-score": 0.8571428571428571,
+      "support": 27.0
+    },
+    "accuracy": 0.8444444444444444,
+    "macro avg": {
+      "precision": 0.8468379446640316,
+      "recall": 0.8611111111111112,
+      "f1-score": 0.8432055749128919,
+      "support": 45.0
+    },
+    "weighted avg": {
+      "precision": 0.8683794466403162,
+      "recall": 0.8444444444444444,
+      "f1-score": 0.845993031358885,
+      "support": 45.0
+    }
+  },
+  "weights": [
+    {
+      "feature": "ragas",
+      "weight": 1.6951232816751156
+    },
+    {
+      "feature": "selfcheck",
+      "weight": 1.287667701566707
+    },
+    {
+      "feature": "similarity",
+      "weight": 0.5890573510104583
+    },
+    {
+      "feature": "baseline",
+      "weight": 0.2719872729752291
+    }
+  ]
+}

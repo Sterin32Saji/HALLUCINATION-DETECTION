@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">System architecture for technical RAG hallucination detection</title>
+  <desc id="desc">Architecture diagram showing offline corpus preparation, runtime RAG answering, detector evaluation, supervised modelling, and application dashboard outputs.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2f3a4a"/>
+    </marker>
+    <style>
+      .bg { fill: #f7f9fc; }
+      .band { fill: #eaf0f7; stroke: #c9d5e4; stroke-width: 1.5; }
+      .box { fill: #ffffff; stroke: #41516a; stroke-width: 1.7; rx: 8; }
+      .box2 { fill: #fef7e6; stroke: #856404; stroke-width: 1.7; rx: 8; }
+      .box3 { fill: #eef8f0; stroke: #2f6b3f; stroke-width: 1.7; rx: 8; }
+      .box4 { fill: #f4effb; stroke: #5f3b85; stroke-width: 1.7; rx: 8; }
+      .title { font: 700 24px Arial, sans-serif; fill: #172033; }
+      .bandtitle { font: 700 16px Arial, sans-serif; fill: #26364d; }
+      .label { font: 700 14px Arial, sans-serif; fill: #172033; }
+      .small { font: 12px Arial, sans-serif; fill: #2e3b4f; }
+      .tiny { font: 11px Arial, sans-serif; fill: #40506a; }
+      .arrow { stroke: #2f3a4a; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #6d7890; stroke-width: 2; fill: none; stroke-dasharray: 6 5; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="760"/>
+  <text class="title" x="52" y="45">Technical RAG Hallucination Detection System Architecture</text>
+
+  <rect class="band" x="40" y="75" width="1120" height="170" rx="12"/>
+  <text class="bandtitle" x="62" y="103">Offline Corpus And Index Construction</text>
+  <rect class="box" x="70" y="125" width="165" height="82"/>
+  <text class="label" x="92" y="153">Technical PDFs</text>
+  <text class="small" x="92" y="174">NIST, OWASP, RFC,</text>
+  <text class="small" x="92" y="191">AWS documents</text>
+  <rect class="box" x="275" y="125" width="180" height="82"/>
+  <text class="label" x="296" y="153">Chunking</text>
+  <text class="small" x="296" y="174">800 tokens</text>
+  <text class="small" x="296" y="191">120-token overlap</text>
+  <rect class="box" x="495" y="125" width="190" height="82"/>
+  <text class="label" x="517" y="153">Embeddings</text>
+  <text class="small" x="517" y="174">Sentence-BERT</text>
+  <text class="small" x="517" y="191">384 dimensions</text>
+  <rect class="box" x="725" y="125" width="175" height="82"/>
+  <text class="label" x="747" y="153">FAISS Index</text>
+  <text class="small" x="747" y="174">7,513 chunks</text>
+  <text class="small" x="747" y="191">semantic search</text>
+  <rect class="box2" x="940" y="125" width="180" height="82"/>
+  <text class="label" x="962" y="153">QA Records</text>
+  <text class="small" x="962" y="174">question, answer,</text>
+  <text class="small" x="962" y="191">evidence, metadata</text>
+
+  <path class="arrow" d="M235 166 H275"/>
+  <path class="arrow" d="M455 166 H495"/>
+  <path class="arrow" d="M685 166 H725"/>
+  <path class="arrow" d="M900 166 H940"/>
+
+  <rect class="band" x="40" y="270" width="1120" height="170" rx="12"/>
+  <text class="bandtitle" x="62" y="298">Runtime RAG Answering</text>
+  <rect class="box" x="85" y="322" width="175" height="82"/>
+  <text class="label" x="108" y="350">User Question</text>
+  <text class="small" x="108" y="371">uploaded-document</text>
+  <text class="small" x="108" y="388">technical query</text>
+  <rect class="box" x="315" y="322" width="175" height="82"/>
+  <text class="label" x="337" y="350">Retriever</text>
+  <text class="small" x="337" y="371">top-k evidence</text>
+  <text class="small" x="337" y="388">k = 3 or 5</text>
+  <rect class="box" x="545" y="322" width="195" height="82"/>
+  <text class="label" x="567" y="350">Answer Generator</text>
+  <text class="small" x="567" y="371">Ollama Qwen 2.5:7B</text>
+  <text class="small" x="567" y="388">temperature = 0.1</text>
+  <rect class="box2" x="795" y="322" width="230" height="82"/>
+  <text class="label" x="817" y="350">RAG Output</text>
+  <text class="small" x="817" y="371">question, retrieved evidence,</text>
+  <text class="small" x="817" y="388">generated answer</text>
+  <path class="arrow" d="M260 363 H315"/>
+  <path class="arrow" d="M490 363 H545"/>
+  <path class="arrow" d="M740 363 H795"/>
+  <path class="dash" d="M812 207 C812 245 402 260 402 322"/>
+
+  <rect class="band" x="40" y="465" width="1120" height="210" rx="12"/>
+  <text class="bandtitle" x="62" y="493">Detection, Supervised Models, And User-Facing Output</text>
+  <rect class="box4" x="70" y="520" width="195" height="110"/>
+  <text class="label" x="92" y="548">Baseline Detectors</text>
+  <text class="small" x="92" y="571">LLM judge</text>
+  <text class="small" x="92" y="588">RAGAS faithfulness</text>
+  <text class="small" x="92" y="605">SelfCheck-style</text>
+  <text class="small" x="92" y="622">retrieval similarity</text>
+  <rect class="box4" x="305" y="520" width="185" height="110"/>
+  <text class="label" x="327" y="548">Hybrid Model</text>
+  <text class="small" x="327" y="571">Logistic Regression</text>
+  <text class="small" x="327" y="588">over detector outputs</text>
+  <text class="tiny" x="327" y="609">held-out F1 = 0.8571</text>
+  <rect class="box3" x="530" y="520" width="220" height="110"/>
+  <text class="label" x="552" y="548">Custom Detector</text>
+  <text class="small" x="552" y="571">semantic, lexical,</text>
+  <text class="small" x="552" y="588">technical-consistency,</text>
+  <text class="small" x="552" y="605">metadata features</text>
+  <text class="tiny" x="552" y="626">held-out F1 = 0.8000</text>
+  <rect class="box2" x="790" y="520" width="160" height="110"/>
+  <text class="label" x="812" y="548">Risk Score</text>
+  <text class="small" x="812" y="571">Low / Medium</text>
+  <text class="small" x="812" y="588">High / Critical</text>
+  <text class="tiny" x="812" y="609">interpretive bands</text>
+  <rect class="box" x="990" y="520" width="140" height="110"/>
+  <text class="label" x="1012" y="548">Frontend</text>
+  <text class="small" x="1012" y="571">answer</text>
+  <text class="small" x="1012" y="588">evidence</text>
+  <text class="small" x="1012" y="605">risk details</text>
+
+  <path class="arrow" d="M910 404 C910 455 168 465 168 520"/>
+  <path class="arrow" d="M265 575 H305"/>
+  <path class="arrow" d="M490 575 H530"/>
+  <path class="arrow" d="M750 575 H790"/>
+  <path class="arrow" d="M950 575 H990"/>
+
+  <rect class="box2" x="410" y="685" width="380" height="48"/>
+  <text class="label" x="435" y="714">Human-labelled benchmark: 300 records, split 210 / 45 / 45</text>
+  <path class="dash" d="M600 685 C600 655 397 655 397 630"/>
+  <path class="dash" d="M600 685 C600 655 640 655 640 630"/>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-06-07 07:04:46.647294",
+  "model": "qwen2.5:7b",
+  "temperature": 0.0,
+  "chunk_size": 800,
+  "chunk_overlap": 120,
+  "prompt_version": "v1",
+  "pdfs": [
+    "docs/NIST.CSWP.29.pdf",
+    "docs/NIST.SP.800-53r5.pdf",
+    "docs/NIST.SP.800-171r3.pdf",
+    "docs/OWASP_Application_Security_Verification_Standard_5.0.0_en (1).pdf",
+    "docs/rfc9110.pdf",
+    "docs/wellarchitected-framework.pdf"
+  ]
+}

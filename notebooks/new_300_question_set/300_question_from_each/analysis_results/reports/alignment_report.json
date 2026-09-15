@@ -1,0 +1,18 @@
+{
+  "alignment_ok": true,
+  "counts": {
+    "baseline": 300,
+    "ragas": 300,
+    "selfcheck": 300,
+    "similarity": 300,
+    "human": 300
+  },
+  "unique_id_counts": {
+    "baseline": 300,
+    "ragas": 300,
+    "selfcheck": 300,
+    "similarity": 300,
+    "human": 300
+  },
+  "missing_by_file_sample": {}
+}

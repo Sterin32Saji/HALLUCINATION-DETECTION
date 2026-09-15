@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grounded Hallucination Chat</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="sidebar-head">
+          <h1>Grounded Hallucination Chat</h1>
+          <button id="new-chat-btn" class="btn ghost">+ New Chat</button>
+          <p class="small">API: <span id="api-url-label">http://127.0.0.1:5055</span></p>
+        </div>
+        <div id="chat-list" class="chat-list"></div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="top-bar">
+          <div>
+            <h2 id="chat-title">Chat</h2>
+            <p id="chat-subtitle" class="small">Upload a PDF to start grounded QA.</p>
+          </div>
+          <form id="upload-form" class="upload-form">
+            <input id="pdf-file" type="file" accept=".pdf" />
+            <button id="upload-btn" type="submit" class="btn">Upload PDF</button>
+          </form>
+        </header>
+
+        <section class="controls">
+          <label>
+            Active Document
+            <select id="document-select"></select>
+          </label>
+          <label>
+            Question Type
+            <input id="question-type" type="text" value="unknown" />
+          </label>
+          <label>
+            Difficulty
+            <input id="difficulty" type="text" value="unknown" />
+          </label>
+          <label>
+            top_k
+            <input id="top-k" type="number" min="1" max="8" value="3" />
+          </label>
+          <fieldset class="model-toggle">
+            <legend>Scoring Model</legend>
+            <label class="check-item">
+              <input id="model-custom" type="checkbox" checked />
+              <span>Custom</span>
+            </label>
+            <label class="check-item">
+              <input id="model-hybrid" type="checkbox" />
+              <span>Hybrid</span>
+            </label>
+          </fieldset>
+        </section>
+
+        <section id="status-box" class="status" hidden>
+          <p id="status-text">Working...</p>
+        </section>
+
+        <section id="error-box" class="error" hidden>
+          <p id="error-output"></p>
+        </section>
+
+        <section class="evaluation-dashboard" aria-labelledby="evaluation-title">
+          <div class="dashboard-head">
+            <div>
+              <h3 id="evaluation-title">Evaluation Dashboard</h3>
+              <p id="evaluation-subtitle" class="small">Loading 300-question evaluation...</p>
+            </div>
+            <button id="refresh-evaluation-btn" type="button" class="btn ghost">Refresh</button>
+          </div>
+          <div id="integrity-strip" class="integrity-strip"></div>
+          <div class="dashboard-grid">
+            <section class="dashboard-panel wide">
+              <h4>Overall Performance</h4>
+              <div id="metrics-table" class="table-wrap"></div>
+            </section>
+            <section class="dashboard-panel">
+              <h4>F1 Comparison</h4>
+              <div id="performance-chart" class="chart-box"></div>
+            </section>
+            <section class="dashboard-panel">
+              <h4>Confusion Matrix</h4>
+              <select id="confusion-method"></select>
+              <div id="confusion-matrix" class="confusion-matrix"></div>
+            </section>
+            <section class="dashboard-panel">
+              <h4>Score Distribution</h4>
+              <select id="distribution-method"></select>
+              <div id="distribution-chart" class="chart-box"></div>
+            </section>
+            <section class="dashboard-panel">
+              <h4>ROC Curve</h4>
+              <select id="roc-method"></select>
+              <div id="roc-chart" class="chart-box"></div>
+            </section>
+            <section class="dashboard-panel">
+              <h4>Precision-Recall</h4>
+              <select id="pr-method"></select>
+              <div id="pr-chart" class="chart-box"></div>
+            </section>
+            <section class="dashboard-panel">
+              <h4>Threshold Analysis</h4>
+              <select id="threshold-method"></select>
+              <div id="threshold-chart" class="chart-box"></div>
+            </section>
+            <section class="dashboard-panel">
+              <h4>Risk Distribution</h4>
+              <div id="risk-summary" class="risk-summary"></div>
+              <div id="risk-chart" class="chart-box"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="messages" class="messages"></section>
+
+        <form id="ask-form" class="composer">
+          <textarea id="question" rows="3" placeholder="Ask a question about the uploaded document..."></textarea>
+          <div class="composer-row">
+            <textarea id="reference-answer" rows="2" placeholder="Optional reference answer"></textarea>
+            <button id="send-btn" type="submit" class="btn">Send</button>
+          </div>
+          <div id="ask-loading" class="ask-loading" hidden>
+            <span class="spinner" aria-hidden="true"></span>
+            <span>Analyzing answer and checking hallucination risk...</span>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

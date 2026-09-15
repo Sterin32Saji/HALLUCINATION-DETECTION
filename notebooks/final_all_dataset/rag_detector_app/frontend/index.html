@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG Detector App</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+
+    <!-- ── SCREEN 1: load / upload ───────────────────────────── -->
+    <div id="screen-load" class="shell">
+      <header class="hero">
+        <h1>RAG Detector</h1>
+        <p>Upload a PDF to build a knowledge index, or resume a previous session.</p>
+      </header>
+
+      <!-- previously processed PDFs -->
+      <section class="card" id="existing-section" hidden>
+        <h2>Resume a previous PDF</h2>
+        <div id="index-list" class="index-list"></div>
+      </section>
+
+      <!-- upload new PDF -->
+      <section class="card">
+        <h2>Upload a new PDF</h2>
+        <form id="upload-form">
+          <label class="file-label" id="file-label">
+            <span id="file-name-display">Choose PDF file…</span>
+            <input id="pdf-file" type="file" accept=".pdf" />
+          </label>
+          <button type="submit" id="upload-btn" disabled>Upload + Build Index</button>
+        </form>
+
+        <!-- inline progress shown during upload -->
+        <div id="upload-progress" class="progress-wrap" hidden>
+          <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+          <p id="progress-text" class="progress-text">Starting…</p>
+        </div>
+        <div id="upload-error" class="inline-error" hidden></div>
+      </section>
+    </div>
+
+    <!-- ── SCREEN 2: ask questions ────────────────────────────── -->
+    <div id="screen-ask" class="shell" hidden>
+      <header class="hero hero-ask">
+        <div class="hero-left">
+          <h1>RAG Detector</h1>
+          <p id="active-doc-label" class="small"></p>
+        </div>
+        <div class="hero-right">
+          <button id="switch-pdf-btn" class="btn-secondary">⇄ Switch PDF</button>
+        </div>
+      </header>
+
+      <!-- conversation thread -->
+      <section class="card chat-card">
+        <div id="chat-thread" class="chat-thread">
+          <p class="chat-hint">Ask any question about the document.</p>
+        </div>
+        <form id="ask-form" class="ask-bar">
+          <textarea id="question" rows="2" placeholder="Ask a question…"></textarea>
+          <button type="submit" id="ask-btn">Ask</button>
+        </form>
+      </section>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

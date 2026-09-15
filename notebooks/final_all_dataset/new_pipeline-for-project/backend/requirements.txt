@@ -1,0 +1,13 @@
+Flask==3.1.2
+flask-cors==6.0.1
+joblib==1.5.3
+pandas==3.0.3
+numpy==2.4.4
+scikit-learn==1.8.0
+langchain-core==1.4.0
+langchain-ollama==1.1.0
+langchain-community==0.4.1
+datasets==5.0.0
+ragas==0.4.3
+tqdm==4.67.3
+sentence-transformers==3.1.1

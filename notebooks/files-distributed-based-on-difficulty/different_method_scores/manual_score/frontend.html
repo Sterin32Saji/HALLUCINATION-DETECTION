@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hallucination Labeler</title>
+<style>
+:root {
+    color-scheme: light;
+    --bg: #f4f6fb;
+    --bg-accent: linear-gradient(135deg, #f8fafc 0%, #eef3ff 45%, #fef7f0 100%);
+    --surface: rgba(255, 255, 255, 0.88);
+    --surface-strong: #ffffff;
+    --panel: #f8faff;
+    --panel-hover: #edf3ff;
+    --panel-active: #e2ebff;
+    --border: #d7deed;
+    --border-strong: #bfd0f3;
+    --text: #1c2434;
+    --muted: #667085;
+    --primary: #1f6feb;
+    --primary-soft: #dce9ff;
+    --success: #157347;
+    --success-soft: #dff6e8;
+    --danger: #b42318;
+    --danger-soft: #fde7e5;
+    --warning: #b54708;
+    --warning-soft: #fff1d6;
+    --shadow: 0 18px 40px rgba(44, 62, 100, 0.12);
+    --shadow-soft: 0 10px 24px rgba(44, 62, 100, 0.08);
+    --radius-xl: 24px;
+    --radius-lg: 18px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    background: var(--bg-accent);
+    color: var(--text);
+    font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    border: 1px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-soft);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.app-shell {
+    min-height: 100vh;
+    padding: 20px;
+}
+
+#app {
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 249, 255, 0.92) 100%);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.brand-mark {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #1f6feb 0%, #6ea8fe 100%);
+    color: #fff;
+    font-size: 22px;
+    box-shadow: 0 12px 24px rgba(31, 111, 235, 0.25);
+}
+
+.brand-copy {
+    min-width: 0;
+}
+
+.eyebrow {
+    margin: 0 0 4px;
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.logo {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.subhead {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.button {
+    padding: 11px 18px;
+    background: var(--surface-strong);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.button.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.button.success {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+}
+
+.button.danger {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+}
+
+.status-strip {
+    display: grid;
+    gap: 8px;
+    padding: 14px 24px 12px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.74);
+}
+
+#status {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+#progress {
+    height: 8px;
+    background: #e6ebf5;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #1f6feb 0%, #69a2ff 100%);
+    transition: width 0.2s ease;
+}
+
+main {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 18px;
+    border-right: 1px solid var(--border);
+    background: rgba(249, 251, 255, 0.92);
+}
+
+.sidebar-top {
+    display: grid;
+    gap: 16px;
+}
+
+.field,
+.search,
+select,
+input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-strong);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.field:focus,
+.search:focus,
+select:focus,
+input[type="text"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-strong);
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filter input {
+    margin: 0;
+}
+
+#records {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    margin-top: 16px;
+    padding-right: 4px;
+}
+
+.record {
+    margin-bottom: 10px;
+    padding: 16px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    background: var(--surface-strong);
+    box-shadow: 0 1px 0 rgba(17, 24, 39, 0.02);
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+}
+
+.record:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+}
+
+.record.active {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+}
+
+.record-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+.record-status {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.status-hall {
+    color: var(--danger);
+}
+
+.status-ok {
+    color: var(--success);
+}
+
+.status-none {
+    color: var(--warning);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    background: rgba(255, 255, 255, 0.62);
+}
+
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+}
+
+.badge {
+    margin-left: auto;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.badge.hall {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.badge.ok {
+    background: var(--success-soft);
+    color: var(--success);
+}
+
+.badge.none {
+    background: var(--warning-soft);
+    color: var(--warning);
+}
+
+.meta {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+#details {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 20px;
+}
+
+.hero-card,
+.card {
+    background: var(--surface-strong);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+}
+
+.hero-card {
+    display: grid;
+    gap: 14px;
+    padding: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #f6f9ff 100%);
+}
+
+.hero-title {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -0.03em;
+}
+
+.hero-copy {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.shortcut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.shortcut {
+    padding: 14px;
+    border-radius: var(--radius-md);
+    background: var(--panel);
+    border: 1px solid var(--border);
+}
+
+.shortcut strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.shortcut span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.card {
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.card-title {
+    padding: 14px 16px 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.card-body {
+    padding: 14px 16px 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.65;
+    font-size: 14px;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.nav-button {
+    min-width: 46px;
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: 14px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+#position {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%) translateY(18px);
+    padding: 13px 18px;
+    border-radius: 999px;
+    background: rgba(28, 36, 52, 0.92);
+    color: #fff;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 980px) {
+    .app-shell {
+        padding: 0;
+    }
+
+    #app {
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        max-height: 42vh;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .meta {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    header,
+    .toolbar,
+    footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .actions,
+    .toolbar {
+        width: 100%;
+    }
+
+    .toolbar {
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        margin-left: 0;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+<div id="app">
+<header>
+    <div class="brand">
+        <div class="brand-mark" aria-hidden="true">H</div>
+        <div class="brand-copy">
+            <p class="eyebrow">Manual Review</p>
+            <h1 class="logo">Hallucination Labeler</h1>
+            <p class="subhead">Lightweight JSONL review with immediate local persistence when file access is available.</p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <select id="fileSelector" class="button" style="min-width: 220px; text-align: left;">
+            <option value="">Select a file...</option>
+        </select>
+        <button id="refreshBtn" class="button" type="button">↻ Refresh</button>
+        <button id="saveBtn" class="button success" type="button">💾 Save</button>
+        <button id="downloadBtn" class="button" type="button">⬇ Download</button>
+        <span id="serverStatus" style="padding: 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;">●</span>
+    </div>
+</header>
+
+<div class="status-strip">
+    <div id="status">No file loaded</div>
+    <div id="progress" aria-hidden="true"><div id="progress-bar"></div></div>
+</div>
+
+<main>
+    <section class="sidebar">
+        <div class="sidebar-top">
+            <input id="search" class="search" type="text" placeholder="Search records...">
+
+            <div class="filters">
+                <label class="filter"><input type="radio" name="filter" value="all" checked>All</label>
+                <label class="filter"><input type="radio" name="filter" value="unlabeled">Unlabeled</label>
+                <label class="filter"><input type="radio" name="filter" value="hall">Hallucinated</label>
+                <label class="filter"><input type="radio" name="filter" value="ok">Not hallucinated</label>
+            </div>
+        </div>
+
+        <div id="records"></div>
+    </section>
+
+    <section class="content">
+        <div class="toolbar">
+            <button id="hallBtn" class="button danger" type="button">Hallucinated (H)</button>
+            <button id="okBtn" class="button success" type="button">Correct (N)</button>
+            <button id="removeBtn" class="button" type="button">Remove (U)</button>
+            <button id="copyBtn" class="button" type="button">Copy JSON</button>
+            <div id="badge" class="badge none">No record</div>
+        </div>
+
+        <div class="meta">
+            <select id="typeSelect" aria-label="Hallucination type">
+                <option value="">No type</option>
+            </select>
+            <input id="reason" type="text" placeholder="Reason...">
+        </div>
+
+        <div id="details">
+            <section class="hero-card">
+                <h2 class="hero-title">Review one record at a time.</h2>
+                <p class="hero-copy">Select a JSONL file from the dropdown to start labeling. Each edit will autosave to the server after a short delay. You can also download a local copy at any time.</p>
+                <div class="shortcut-grid">
+                    <div class="shortcut"><strong>H</strong><span>Mark hallucinated</span></div>
+                    <div class="shortcut"><strong>N</strong><span>Mark correct</span></div>
+                    <div class="shortcut"><strong>U</strong><span>Remove label</span></div>
+                    <div class="shortcut"><strong>← / →</strong><span>Move records</span></div>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <button id="firstBtn" class="button nav-button" type="button" aria-label="First record">&#x23EE;</button>
+    <button id="prevBtn" class="button nav-button" type="button" aria-label="Previous record">&#x25C0;</button>
+    <button id="nextBtn" class="button nav-button" type="button" aria-label="Next record">&#x25B6;</button>
+    <button id="lastBtn" class="button nav-button" type="button" aria-label="Last record">&#x23ED;</button>
+    <div class="spacer"></div>
+    <div id="position">0 / 0</div>
+</footer>
+</div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

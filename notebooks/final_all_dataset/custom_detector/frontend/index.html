@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Detector Debug</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <h1>Custom Hallucination Detector Debug</h1>
+        <p>Upload a PDF, build RAG chunks/index, ask questions, and get hallucination score from your custom detector.</p>
+        <p class="small">Node API: <span id="api-url-label">http://127.0.0.1:5055</span></p>
+      </header>
+
+      <section class="card">
+        <h2>Step 1: Upload Document PDF</h2>
+        <form id="upload-form">
+          <input id="pdf-file" type="file" accept=".pdf" />
+          <button type="submit">Upload And Build Index</button>
+        </form>
+        <div id="index-info" class="info" hidden></div>
+      </section>
+
+      <section class="card">
+        <h2>Step 2: Ask Question (Base RAG + Hallucination Score)</h2>
+        <form id="ask-form">
+          <label>
+            Question
+            <textarea id="question" rows="4"></textarea>
+          </label>
+
+          <label>
+            Optional reference answer (if available)
+            <textarea id="reference-answer" rows="3"></textarea>
+          </label>
+
+          <div class="row">
+            <label>
+              Question Type
+              <input id="question-type" type="text" value="unknown" />
+            </label>
+            <label>
+              Difficulty
+              <input id="difficulty" type="text" value="unknown" />
+            </label>
+          </div>
+
+          <label>
+            Retrieval top_k
+            <input id="top-k" type="number" min="1" max="8" value="3" />
+          </label>
+
+          <button type="submit">Generate Answer + Score</button>
+        </form>
+      </section>
+
+      <section class="card status" id="status-box" hidden>
+        <h2>Progress</h2>
+        <p id="status-text">Preparing request...</p>
+      </section>
+
+      <section class="card" id="result-box" hidden>
+        <h2>Result JSON</h2>
+        <pre id="result-output"></pre>
+      </section>
+
+      <section class="card" id="error-box" hidden>
+        <h2>Error</h2>
+        <pre id="error-output"></pre>
+      </section>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
