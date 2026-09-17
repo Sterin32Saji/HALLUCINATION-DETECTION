@@ -547,7 +547,7 @@ function appendSingleModelResult(container, modelName, result, chunks) {
 
   const chip = document.createElement("div");
   chip.className = scoreClass(score);
-  const modelLabel = modelName === "hybrid" ? "Hybrid" : "Custom";
+  const modelLabel = modelName === "hybrid" ? "Hybrid proxy" : "Custom";
   const predText = prediction === 1 ? "Hallucinated" : "Not Hallucinated";
   chip.textContent = `${modelLabel}: ${predText} • ${riskText(score)}`;
   container.appendChild(chip);
@@ -571,11 +571,11 @@ function appendSingleModelResult(container, modelName, result, chunks) {
   } else {
     const signals = result.signals || {};
     const hybridReasons = [
-      `Hybrid voting signals: baseline=${signals.baseline ?? "n/a"}, selfcheck=${signals.selfcheck ?? "n/a"}, ragas=${signals.ragas ?? "n/a"}, similarity=${signals.similarity ?? "n/a"}.`,
-      `Faithfulness proxy=${Number(signals.faithfulness_proxy || 0).toFixed(3)}, top retrieval score=${Number(signals.top_retrieval_score || 0).toFixed(3)}.`,
+      `Proxy inputs: baseline=${signals.baseline ?? "n/a"}, selfcheck=${signals.selfcheck ?? "n/a"}, ragas=${signals.ragas ?? "n/a"}, similarity=${signals.similarity ?? "n/a"}.`,
+      `Answer-evidence cosine=${Number(signals.faithfulness_proxy || 0).toFixed(3)}, top retrieval score=${Number(signals.top_retrieval_score || 0).toFixed(3)}. These are not RAGAS or SelfCheckGPT outputs.`,
     ];
     if (signals.uncertainty_phrase_detected) {
-      hybridReasons.push("Answer includes uncertainty phrasing, which increased hybrid hallucination risk.");
+      hybridReasons.push("Answer contains an uncertainty phrase used by the proxy rules.");
     }
     for (const reason of hybridReasons) {
       const li = document.createElement("li");

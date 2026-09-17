@@ -1,0 +1,34 @@
+flowchart TD
+    PDF["Uploaded technical PDF"] --> INDEX["Extract text; 800-character chunks; MiniLM embeddings; FAISS index"]
+    Q["User question"] --> RET["Retrieve top-k chunks: default 3, allowed 1-8"]
+    INDEX --> RET
+    RET --> EV["Concatenate retrieved chunks as evidence"]
+    RET --> GEN["Ollama Qwen 2.5:7B generates RAG answer"]
+    Q --> GEN
+    GEN --> ANS["Generated answer"]
+
+    ANS --> AE["Answer-evidence cosine similarity, clipped to 0-1; not RAGAS faithfulness"]
+    EV --> AE
+    Q --> QA["Question-answer cosine similarity, clipped to 0-1"]
+    ANS --> QA
+    RET --> TOP["Maximum retrieved-chunk similarity"]
+    ANS --> UNC["Check five uncertainty phrases"]
+
+    AE --> B["baseline proxy = uncertainty OR AE < 0.45"]
+    UNC --> B
+    AE --> R["ragas proxy = AE < 0.50"]
+    AE --> S["similarity proxy = AE < 0.50"]
+    AE --> SC["selfcheck proxy = (AE < 0.45 AND QA < 0.35) OR (uncertainty AND top < 0.25)"]
+    QA --> SC
+    TOP --> SC
+    UNC --> SC
+
+    B --> FOUR["Four binary proxy inputs"]
+    R --> FOUR
+    S --> FOUR
+    SC --> FOUR
+    FOUR --> MODEL["Saved logistic regression trained on real offline detector decisions"]
+    MODEL --> OUT["Hybrid proxy prediction and probability"]
+    R -.-> DUP["RAGAS-labelled and similarity bits are identical in this prototype"]
+    S -.-> DUP
+    OUT --> LIMIT["Experimental live mode: offline F1 does not validate these substituted inputs"]
