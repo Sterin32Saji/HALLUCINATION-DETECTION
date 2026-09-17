@@ -4,155 +4,155 @@
     {
       "model": "logistic_regression",
       "n": 45,
-      "accuracy": 0.7333333333333333,
-      "precision": 0.7419354838709677,
-      "recall": 0.8518518518518519,
-      "f1": 0.7931034482758621,
-      "specificity": 0.5555555555555556,
-      "false_positive_rate": 0.4444444444444444,
-      "false_negative_rate": 0.14814814814814814,
-      "tp": 23,
-      "tn": 10,
-      "fp": 8,
-      "fn": 4
+      "accuracy": 0.8444444444444444,
+      "precision": 0.8333333333333334,
+      "recall": 0.9259259259259259,
+      "f1": 0.8771929824561403,
+      "specificity": 0.7222222222222222,
+      "false_positive_rate": 0.2777777777777778,
+      "false_negative_rate": 0.07407407407407407,
+      "tp": 25,
+      "tn": 13,
+      "fp": 5,
+      "fn": 2
     },
     {
       "model": "random_forest",
       "n": 45,
-      "accuracy": 0.6222222222222222,
-      "precision": 0.6470588235294118,
-      "recall": 0.8148148148148148,
-      "f1": 0.7213114754098361,
-      "specificity": 0.3333333333333333,
-      "false_positive_rate": 0.6666666666666666,
-      "false_negative_rate": 0.18518518518518517,
-      "tp": 22,
-      "tn": 6,
-      "fp": 12,
-      "fn": 5
+      "accuracy": 0.8444444444444444,
+      "precision": 0.8571428571428571,
+      "recall": 0.8888888888888888,
+      "f1": 0.8727272727272727,
+      "specificity": 0.7777777777777778,
+      "false_positive_rate": 0.2222222222222222,
+      "false_negative_rate": 0.1111111111111111,
+      "tp": 24,
+      "tn": 14,
+      "fp": 4,
+      "fn": 3
     },
     {
       "model": "gradient_boosting",
       "n": 45,
-      "accuracy": 0.5777777777777777,
-      "precision": 0.6333333333333333,
-      "recall": 0.7037037037037037,
-      "f1": 0.6666666666666666,
-      "specificity": 0.3888888888888889,
-      "false_positive_rate": 0.6111111111111112,
-      "false_negative_rate": 0.2962962962962963,
-      "tp": 19,
-      "tn": 7,
-      "fp": 11,
-      "fn": 8
+      "accuracy": 0.8444444444444444,
+      "precision": 0.8846153846153846,
+      "recall": 0.8518518518518519,
+      "f1": 0.8679245283018868,
+      "specificity": 0.8333333333333334,
+      "false_positive_rate": 0.16666666666666666,
+      "false_negative_rate": 0.14814814814814814,
+      "tp": 23,
+      "tn": 15,
+      "fp": 3,
+      "fn": 4
     }
   ],
   "test_metrics": {
     "n": 45,
-    "accuracy": 0.7333333333333333,
-    "precision": 0.7272727272727273,
-    "recall": 0.8888888888888888,
-    "f1": 0.8,
-    "specificity": 0.5,
-    "false_positive_rate": 0.5,
-    "false_negative_rate": 0.1111111111111111,
-    "tp": 24,
-    "tn": 9,
-    "fp": 9,
-    "fn": 3
+    "accuracy": 0.8222222222222222,
+    "precision": 0.8518518518518519,
+    "recall": 0.8518518518518519,
+    "f1": 0.8518518518518519,
+    "specificity": 0.7777777777777778,
+    "false_positive_rate": 0.2222222222222222,
+    "false_negative_rate": 0.14814814814814814,
+    "tp": 23,
+    "tn": 14,
+    "fp": 4,
+    "fn": 4
   },
-  "roc_auc": 0.7160493827160493,
+  "roc_auc": 0.9012345679012346,
   "model_path": "/Users/sterinsaji/Desktop/rag-research/notebooks/new_300_question_set/300_question_from_each/analysis_results/models/custom_hallucination_detector.pkl",
   "n_train": 210,
   "n_val": 45,
   "n_test": 45,
   "classification_report": {
     "0": {
-      "precision": 0.75,
-      "recall": 0.5,
-      "f1-score": 0.6,
+      "precision": 0.7777777777777778,
+      "recall": 0.7777777777777778,
+      "f1-score": 0.7777777777777778,
       "support": 18.0
     },
     "1": {
-      "precision": 0.7272727272727273,
-      "recall": 0.8888888888888888,
-      "f1-score": 0.8,
+      "precision": 0.8518518518518519,
+      "recall": 0.8518518518518519,
+      "f1-score": 0.8518518518518519,
       "support": 27.0
     },
-    "accuracy": 0.7333333333333333,
+    "accuracy": 0.8222222222222222,
     "macro avg": {
-      "precision": 0.7386363636363636,
-      "recall": 0.6944444444444444,
-      "f1-score": 0.7,
+      "precision": 0.8148148148148149,
+      "recall": 0.8148148148148149,
+      "f1-score": 0.8148148148148149,
       "support": 45.0
     },
     "weighted avg": {
-      "precision": 0.7363636363636364,
-      "recall": 0.7333333333333333,
-      "f1-score": 0.72,
+      "precision": 0.8222222222222222,
+      "recall": 0.8222222222222222,
+      "f1-score": 0.8222222222222222,
       "support": 45.0
     }
   },
   "feature_importance_top": [
     {
       "feature": "num__answer_evidence_coverage",
-      "importance": 1.15318744052235
-    },
-    {
-      "feature": "num__answer_evidence_jaccard",
-      "importance": 0.8563666239204081
-    },
-    {
-      "feature": "num__evidence_token_count",
-      "importance": 0.7543817533867332
-    },
-    {
-      "feature": "num__number_match",
-      "importance": 0.740424753248528
-    },
-    {
-      "feature": "num__answer_evidence_token_overlap",
-      "importance": 0.6316010440415505
-    },
-    {
-      "feature": "num__number_extra",
-      "importance": 0.5639041060109731
-    },
-    {
-      "feature": "cat__difficulty_easy",
-      "importance": 0.5272934287475974
-    },
-    {
-      "feature": "num__semantic_question_evidence",
-      "importance": 0.4891846967192693
+      "importance": 1.0074392531853578
     },
     {
       "feature": "num__answer_token_count",
-      "importance": 0.47718658386910484
+      "importance": 0.8767673144645288
     },
     {
-      "feature": "num__answer_unsupported_word_ratio",
-      "importance": 0.4423250197062426
+      "feature": "num__semantic_answer_evidence",
+      "importance": 0.8524131877140197
     },
     {
       "feature": "num__answer_entity_count",
-      "importance": 0.4301090393248624
+      "importance": 0.8363495082108722
     },
     {
-      "feature": "cat__difficulty_medium",
-      "importance": 0.42029016641117756
+      "feature": "num__number_match",
+      "importance": 0.7865252379471862
     },
     {
-      "feature": "num__answer_evidence_keyword_overlap",
-      "importance": 0.3881081519856605
+      "feature": "num__answer_unsupported_word_ratio",
+      "importance": 0.6439480710007718
     },
     {
-      "feature": "cat__question_type_example",
-      "importance": 0.3507045578228758
+      "feature": "num__answer_evidence_token_overlap",
+      "importance": 0.6439480710007712
     },
     {
-      "feature": "num__question_evidence_target_coverage",
-      "importance": 0.328151697163856
+      "feature": "num__question_evidence_keyword_overlap",
+      "importance": 0.6386527869463906
+    },
+    {
+      "feature": "num__answer_evidence_jaccard",
+      "importance": 0.6245402334591739
+    },
+    {
+      "feature": "num__semantic_question_evidence",
+      "importance": 0.617021029872738
+    },
+    {
+      "feature": "cat__question_type_procedural",
+      "importance": 0.5958106197192642
+    },
+    {
+      "feature": "num__date_extra",
+      "importance": 0.5620363320937177
+    },
+    {
+      "feature": "cat__question_type_procedure",
+      "importance": 0.5039714975521544
+    },
+    {
+      "feature": "cat__difficulty_easy",
+      "importance": 0.5028302839823546
+    },
+    {
+      "feature": "num__answer_evidence_length_ratio",
+      "importance": 0.47068028430241055
     }
   ],
   "train_indices": [

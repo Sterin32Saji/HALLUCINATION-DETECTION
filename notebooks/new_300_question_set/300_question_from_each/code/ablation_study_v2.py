@@ -39,6 +39,7 @@ def main() -> None:
 
     labels = raw.set_index("id").loc[features["id"], "human"].astype(int).reset_index(drop=True)
     split_bundle = {
+        "summary": summary,
         "train_idx": pd.Index(summary["train_indices"]).to_numpy(),
         "val_idx": pd.Index(summary["val_indices"]).to_numpy(),
         "test_idx": pd.Index(summary["test_indices"]).to_numpy(),

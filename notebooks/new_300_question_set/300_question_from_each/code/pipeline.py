@@ -246,8 +246,11 @@ def build_merged_datasets() -> tuple[pd.DataFrame, pd.DataFrame]:
 def build_features(merged_raw: pd.DataFrame) -> pd.DataFrame:
     extractor = CustomFeatureExtractor()
     feature_input = merged_raw[
-        ["id", "question", "question_type", "difficulty", "answer", "evidence"]
+        ["id", "question", "question_type", "difficulty", "rag_answer", "evidence"]
     ].copy()
+    if feature_input["rag_answer"].isna().any() or feature_input["rag_answer"].astype(str).str.strip().eq("").any():
+        raise ValueError("Every record needs a generated RAG answer for custom feature extraction.")
+    feature_input = feature_input.rename(columns={"rag_answer": "answer"})
     features = extractor.transform(feature_input)
     features = features.sort_values("id").reset_index(drop=True)
     features.to_csv(FEATURES_PATH, index=False)
@@ -329,20 +332,21 @@ def custom_feature_groups() -> dict[str, list[str]]:
     }
 
 
-def train_logistic_on_columns(
+def train_model_on_columns(
     features: pd.DataFrame,
     labels: pd.Series,
     feature_cols: list[str],
     train_idx: np.ndarray,
     val_idx: np.ndarray,
     test_idx: np.ndarray,
+    model_name: str,
     random_state: int = 42,
 ) -> dict[str, Any]:
     categorical_cols = [col for col in ["question_type", "difficulty"] if col in feature_cols]
     numeric_cols = [col for col in feature_cols if col not in categorical_cols]
     pipe = Pipeline([
         ("preprocess", build_preprocessor(categorical_cols, numeric_cols)),
-        ("model", LogisticRegression(max_iter=2000, random_state=random_state)),
+        ("model", model_registry(random_state)[model_name]),
     ])
     train_val_idx = np.concatenate([train_idx, val_idx])
     pipe.fit(features.iloc[train_val_idx][feature_cols], labels.iloc[train_val_idx])
@@ -1014,6 +1018,7 @@ def run_ablation_study(features: pd.DataFrame, labels: pd.Series, split_bundle: 
     test_idx = split_bundle["test_idx"]
     feature_cols = [col for col in features.columns if col != "id"]
     groups = custom_feature_groups()
+    model_name = split_bundle["summary"]["best_model"]
 
     grouped = sorted({feature for cols in groups.values() for feature in cols})
     missing = sorted(set(grouped) - set(feature_cols))
@@ -1021,13 +1026,13 @@ def run_ablation_study(features: pd.DataFrame, labels: pd.Series, split_bundle: 
     if missing or ungrouped:
         raise ValueError(f"Feature-group coverage mismatch. Missing={missing}; ungrouped={ungrouped}")
 
-    full = train_logistic_on_columns(features, labels, feature_cols, train_idx, val_idx, test_idx)
+    full = train_model_on_columns(features, labels, feature_cols, train_idx, val_idx, test_idx, model_name)
     full_metrics = full["metrics"]
 
     rows: list[dict[str, Any]] = []
     for group_name, group_features in groups.items():
         kept_features = [col for col in feature_cols if col not in group_features]
-        ablated = train_logistic_on_columns(features, labels, kept_features, train_idx, val_idx, test_idx)
+        ablated = train_model_on_columns(features, labels, kept_features, train_idx, val_idx, test_idx, model_name)
         metrics = ablated["metrics"]
         rows.append(
             {
@@ -1150,14 +1155,14 @@ def evaluate_all_methods(
     score_metrics: dict[str, dict[str, float | str]] = {}
     rng = np.random.default_rng(42)
     n_boot = 5000
+    bootstrap_samples = rng.integers(0, len(y_true), size=(n_boot, len(y_true)))
 
     for name, pred in predictions.items():
         metrics = evaluate_predictions(pd.Series(y_true), pred)
         metrics_rows.append({"method": name, **metrics})
 
         boot = []
-        for _ in range(n_boot):
-            sample = rng.choice(len(y_true), size=len(y_true), replace=True)
+        for sample in bootstrap_samples:
             boot.append(f1_score(y_true[sample], pred[sample], zero_division=0))
         bootstrapped_f1[name] = bootstrap_ci(np.asarray(boot))
 
@@ -1194,18 +1199,13 @@ def evaluate_all_methods(
     disagreements = b + c
     p_value = float(binomtest(max(b, c), n=disagreements, p=0.5, alternative="two-sided").pvalue) if disagreements else 1.0
 
-    custom_boot = []
-    hybrid_boot = []
     diff_boot = []
-    for _ in range(n_boot):
-        sample = rng.choice(len(y_true), size=len(y_true), replace=True)
+    for sample in bootstrap_samples:
         yb = y_true[sample]
         custom_b = custom_pred[sample]
         hybrid_b = hybrid_pred[sample]
         custom_f1 = f1_score(yb, custom_b, zero_division=0)
         hybrid_f1 = f1_score(yb, hybrid_b, zero_division=0)
-        custom_boot.append(custom_f1)
-        hybrid_boot.append(hybrid_f1)
         diff_boot.append(custom_f1 - hybrid_f1)
 
     statistics = {
@@ -1216,8 +1216,8 @@ def evaluate_all_methods(
             "method": "percentile bootstrap",
             "note": "Intervals are reported as lower and upper bounds. With only 45 held-out records, they should be interpreted cautiously.",
             "f1_ci": bootstrapped_f1,
-            "custom_f1_95ci": bootstrap_ci(np.asarray(custom_boot)),
-            "hybrid_f1_95ci": bootstrap_ci(np.asarray(hybrid_boot)),
+            "custom_f1_95ci": bootstrapped_f1["custom"],
+            "hybrid_f1_95ci": bootstrapped_f1["hybrid"],
             "difference_f1_95ci": bootstrap_ci(np.asarray(diff_boot)),
         },
         "paired_test": {

@@ -8,6 +8,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+# The local FAISS and embedding libraries can crash when their native thread pools compete.
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
 import faiss
 import joblib
 import numpy as np
@@ -333,16 +338,10 @@ def _ask_question(payload: dict[str, Any]) -> dict[str, Any]:
     rag_answer = _ollama_answer(question, contexts)
     evidence = "\n\n".join(contexts)
 
-    reference_answer = str(payload.get("reference_answer") or "").strip()
-    if not reference_answer:
-        # When no ground-truth answer is provided at runtime, we use retrieved evidence
-        # as the reference anchor for the custom detector feature extraction.
-        reference_answer = evidence
-
     row = {
         "id": str(payload.get("id") or str(uuid.uuid4())),
         "question": question,
-        "answer": reference_answer,
+        "answer": rag_answer,
         "evidence": evidence,
         "question_type": str(payload.get("question_type") or "unknown"),
         "difficulty": str(payload.get("difficulty") or "unknown"),

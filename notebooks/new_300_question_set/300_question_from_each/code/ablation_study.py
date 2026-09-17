@@ -1,4 +1,4 @@
-"""Compatibility wrapper for the corrected ablation protocol."""
+"""Compatibility wrapper for the final ablation protocol."""
 
 from __future__ import annotations
 

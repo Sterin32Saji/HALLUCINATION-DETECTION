@@ -12,7 +12,6 @@ const ui = {
   documentSelect: document.getElementById("document-select"),
   askForm: document.getElementById("ask-form"),
   question: document.getElementById("question"),
-  referenceAnswer: document.getElementById("reference-answer"),
   questionType: document.getElementById("question-type"),
   difficulty: document.getElementById("difficulty"),
   topK: document.getElementById("top-k"),
@@ -88,7 +87,6 @@ function syncBusyUi() {
   ui.documentSelect.disabled = busy || ui.documentSelect.options.length <= 1;
   ui.pdfFile.disabled = busy;
   ui.question.disabled = busy;
-  ui.referenceAnswer.disabled = busy;
   ui.questionType.disabled = busy;
   ui.difficulty.disabled = busy;
   ui.topK.disabled = busy;
@@ -868,7 +866,6 @@ ui.askForm.addEventListener("submit", async (event) => {
       body: JSON.stringify({
         index_id: indexId,
         question,
-        reference_answer: ui.referenceAnswer.value.trim(),
         question_type: ui.questionType.value.trim() || "unknown",
         difficulty: ui.difficulty.value.trim() || "unknown",
         top_k: Number(ui.topK.value || 3),
@@ -877,7 +874,6 @@ ui.askForm.addEventListener("submit", async (event) => {
     });
 
     ui.question.value = "";
-    ui.referenceAnswer.value = "";
 
     await refreshChats();
     await loadChat(activeChat.id);

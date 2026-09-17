@@ -85,4 +85,7 @@ Optional environment variables:
 - `POST /api/rag/upload-pdf`
 - `POST /api/rag/ask`
 
+## Notes
 
+- The runtime custom model expects features built from question/answer/evidence plus `question_type` and `difficulty` metadata.
+- This app is aligned with the latest model configuration where `rag_answer` and `source_doc` are not used as custom-model feature inputs.
