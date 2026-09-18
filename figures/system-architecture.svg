@@ -1,119 +1,120 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
-  <title id="title">System architecture for technical RAG hallucination detection</title>
-  <desc id="desc">Architecture diagram showing offline corpus preparation, runtime RAG answering, detector evaluation, supervised modelling, and application dashboard outputs.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="945" viewBox="0 0 1200 945" role="img" aria-labelledby="title desc">
+  <title id="title">Technical RAG hallucination detection architecture</title>
+  <desc id="desc">Four stages: corpus indexing, RAG answer generation, offline evaluation, and a separate live prototype path. Offline detector decisions feed the trained hybrid; live heuristic proxy bits feed the saved hybrid model instead. Only the offline path has held-out metrics.</desc>
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#2f3a4a"/>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 Z" fill="#35445a"/>
     </marker>
     <style>
-      .bg { fill: #f7f9fc; }
-      .band { fill: #eaf0f7; stroke: #c9d5e4; stroke-width: 1.5; }
-      .box { fill: #ffffff; stroke: #41516a; stroke-width: 1.7; rx: 8; }
-      .box2 { fill: #fef7e6; stroke: #856404; stroke-width: 1.7; rx: 8; }
-      .box3 { fill: #eef8f0; stroke: #2f6b3f; stroke-width: 1.7; rx: 8; }
-      .box4 { fill: #f4effb; stroke: #5f3b85; stroke-width: 1.7; rx: 8; }
-      .title { font: 700 24px Arial, sans-serif; fill: #172033; }
-      .bandtitle { font: 700 16px Arial, sans-serif; fill: #26364d; }
-      .label { font: 700 14px Arial, sans-serif; fill: #172033; }
-      .small { font: 12px Arial, sans-serif; fill: #2e3b4f; }
-      .tiny { font: 11px Arial, sans-serif; fill: #40506a; }
-      .arrow { stroke: #2f3a4a; stroke-width: 2; fill: none; marker-end: url(#arrow); }
-      .dash { stroke: #6d7890; stroke-width: 2; fill: none; stroke-dasharray: 6 5; marker-end: url(#arrow); }
+      .background { fill: #ffffff; }
+      .band { fill: #f4f7fa; stroke: #c8d3df; stroke-width: 1.5; }
+      .node { fill: #ffffff; stroke: #46566b; stroke-width: 1.7; }
+      .data { fill: #fff8e9; stroke: #9a6b19; stroke-width: 1.7; }
+      .model { fill: #f3eef9; stroke: #664385; stroke-width: 1.7; }
+      .custom { fill: #eef8f1; stroke: #39764b; stroke-width: 1.7; }
+      .heading { font: bold 24px Arial, sans-serif; fill: #162236; }
+      .section { font: bold 16px Arial, sans-serif; fill: #27364b; }
+      .label { font: bold 15px Arial, sans-serif; fill: #19273a; }
+      .detail { font: 13px Arial, sans-serif; fill: #34445a; }
+      .note { font: 12px Arial, sans-serif; fill: #43536a; }
+      .flow { fill: none; stroke: #35445a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
     </style>
   </defs>
 
-  <rect class="bg" x="0" y="0" width="1200" height="760"/>
-  <text class="title" x="52" y="45">Technical RAG Hallucination Detection System Architecture</text>
+  <rect class="background" width="1200" height="945"/>
+  <text class="heading" x="48" y="42">Technical RAG Hallucination Detection System</text>
 
-  <rect class="band" x="40" y="75" width="1120" height="170" rx="12"/>
-  <text class="bandtitle" x="62" y="103">Offline Corpus And Index Construction</text>
-  <rect class="box" x="70" y="125" width="165" height="82"/>
-  <text class="label" x="92" y="153">Technical PDFs</text>
-  <text class="small" x="92" y="174">NIST, OWASP, RFC,</text>
-  <text class="small" x="92" y="191">AWS documents</text>
-  <rect class="box" x="275" y="125" width="180" height="82"/>
-  <text class="label" x="296" y="153">Chunking</text>
-  <text class="small" x="296" y="174">800 tokens</text>
-  <text class="small" x="296" y="191">120-token overlap</text>
-  <rect class="box" x="495" y="125" width="190" height="82"/>
-  <text class="label" x="517" y="153">Embeddings</text>
-  <text class="small" x="517" y="174">Sentence-BERT</text>
-  <text class="small" x="517" y="191">384 dimensions</text>
-  <rect class="box" x="725" y="125" width="175" height="82"/>
-  <text class="label" x="747" y="153">FAISS Index</text>
-  <text class="small" x="747" y="174">7,513 chunks</text>
-  <text class="small" x="747" y="191">semantic search</text>
-  <rect class="box2" x="940" y="125" width="180" height="82"/>
-  <text class="label" x="962" y="153">QA Records</text>
-  <text class="small" x="962" y="174">question, answer,</text>
-  <text class="small" x="962" y="191">evidence, metadata</text>
+  <rect class="band" x="40" y="70" width="1120" height="160" rx="7"/>
+  <text class="section" x="62" y="99">1. Corpus and index construction</text>
+  <rect class="node" x="70" y="125" width="220" height="78" rx="6"/>
+  <text class="label" x="88" y="150">Technical PDFs</text>
+  <text class="detail" x="88" y="173">NIST, OWASP, RFC, AWS</text>
+  <rect class="node" x="345" y="125" width="220" height="78" rx="6"/>
+  <text class="label" x="363" y="150">Text chunking</text>
+  <text class="detail" x="363" y="173">800 characters; 120 overlap</text>
+  <rect class="node" x="620" y="125" width="220" height="78" rx="6"/>
+  <text class="label" x="638" y="150">Sentence embeddings</text>
+  <text class="detail" x="638" y="173">384 dimensions</text>
+  <rect class="data" x="895" y="125" width="220" height="78" rx="6"/>
+  <text class="label" x="913" y="150">FAISS index</text>
+  <text class="detail" x="913" y="173">7,513 searchable chunks</text>
+  <path class="flow" d="M290 164 H345"/>
+  <path class="flow" d="M565 164 H620"/>
+  <path class="flow" d="M840 164 H895"/>
 
-  <path class="arrow" d="M235 166 H275"/>
-  <path class="arrow" d="M455 166 H495"/>
-  <path class="arrow" d="M685 166 H725"/>
-  <path class="arrow" d="M900 166 H940"/>
+  <rect class="band" x="40" y="255" width="1120" height="160" rx="7"/>
+  <text class="section" x="62" y="284">2. RAG answer generation</text>
+  <rect class="node" x="70" y="310" width="220" height="78" rx="6"/>
+  <text class="label" x="88" y="335">User question</text>
+  <text class="detail" x="88" y="358">Technical query</text>
+  <rect class="node" x="345" y="310" width="220" height="78" rx="6"/>
+  <text class="label" x="363" y="335">Retriever</text>
+  <text class="detail" x="363" y="358">Top-k evidence chunks</text>
+  <rect class="node" x="620" y="310" width="220" height="78" rx="6"/>
+  <text class="label" x="638" y="335">Answer generator</text>
+  <text class="detail" x="638" y="358">Ollama Qwen 2.5:7B</text>
+  <rect class="data" x="895" y="310" width="220" height="78" rx="6"/>
+  <text class="label" x="913" y="335">RAG output</text>
+  <text class="detail" x="913" y="358">Answer and evidence</text>
+  <path class="flow" d="M290 349 H345"/>
+  <path class="flow" d="M565 349 H620"/>
+  <path class="flow" d="M840 349 H895"/>
+  <path class="flow" d="M1005 203 V242 H455 V310"/>
 
-  <rect class="band" x="40" y="270" width="1120" height="170" rx="12"/>
-  <text class="bandtitle" x="62" y="298">Runtime RAG Answering</text>
-  <rect class="box" x="85" y="322" width="175" height="82"/>
-  <text class="label" x="108" y="350">User Question</text>
-  <text class="small" x="108" y="371">uploaded-document</text>
-  <text class="small" x="108" y="388">technical query</text>
-  <rect class="box" x="315" y="322" width="175" height="82"/>
-  <text class="label" x="337" y="350">Retriever</text>
-  <text class="small" x="337" y="371">top-k evidence</text>
-  <text class="small" x="337" y="388">k = 3 or 5</text>
-  <rect class="box" x="545" y="322" width="195" height="82"/>
-  <text class="label" x="567" y="350">Answer Generator</text>
-  <text class="small" x="567" y="371">Ollama Qwen 2.5:7B</text>
-  <text class="small" x="567" y="388">temperature = 0.1</text>
-  <rect class="box2" x="795" y="322" width="230" height="82"/>
-  <text class="label" x="817" y="350">RAG Output</text>
-  <text class="small" x="817" y="371">question, retrieved evidence,</text>
-  <text class="small" x="817" y="388">generated answer</text>
-  <path class="arrow" d="M260 363 H315"/>
-  <path class="arrow" d="M490 363 H545"/>
-  <path class="arrow" d="M740 363 H795"/>
-  <path class="dash" d="M812 207 C812 245 402 260 402 322"/>
+  <rect class="band" x="40" y="440" width="1120" height="315" rx="7"/>
+  <text class="section" x="62" y="469">3. Offline benchmark and detector evaluation</text>
+  <rect class="data" x="70" y="520" width="205" height="155" rx="6"/>
+  <path class="flow" d="M1005 388 V427 H25 V597 H70"/>
+  <text class="label" x="88" y="549">Labelled benchmark</text>
+  <text class="detail" x="88" y="576">300 records</text>
+  <text class="detail" x="88" y="598">Question, generated answer,</text>
+  <text class="detail" x="88" y="617">evidence and human label</text>
+  <text class="detail" x="88" y="649">Split: 210 / 45 / 45</text>
 
-  <rect class="band" x="40" y="465" width="1120" height="210" rx="12"/>
-  <text class="bandtitle" x="62" y="493">Detection, Supervised Models, And User-Facing Output</text>
-  <rect class="box4" x="70" y="520" width="195" height="110"/>
-  <text class="label" x="92" y="548">Baseline Detectors</text>
-  <text class="small" x="92" y="571">LLM judge</text>
-  <text class="small" x="92" y="588">RAGAS faithfulness</text>
-  <text class="small" x="92" y="605">SelfCheck-style</text>
-  <text class="small" x="92" y="622">retrieval similarity</text>
-  <rect class="box4" x="305" y="520" width="185" height="110"/>
-  <text class="label" x="327" y="548">Hybrid Model</text>
-  <text class="small" x="327" y="571">Logistic Regression</text>
-  <text class="small" x="327" y="588">over detector outputs</text>
-  <text class="tiny" x="327" y="609">held-out F1 = 0.8571</text>
-  <rect class="box3" x="530" y="520" width="220" height="110"/>
-  <text class="label" x="552" y="548">Custom Detector</text>
-  <text class="small" x="552" y="571">semantic, lexical,</text>
-  <text class="small" x="552" y="588">technical-consistency,</text>
-  <text class="small" x="552" y="605">metadata features</text>
-  <text class="tiny" x="552" y="626">held-out F1 = 0.8000</text>
-  <rect class="box2" x="790" y="520" width="160" height="110"/>
-  <text class="label" x="812" y="548">Risk Score</text>
-  <text class="small" x="812" y="571">Low / Medium</text>
-  <text class="small" x="812" y="588">High / Critical</text>
-  <text class="tiny" x="812" y="609">interpretive bands</text>
-  <rect class="box" x="990" y="520" width="140" height="110"/>
-  <text class="label" x="1012" y="548">Frontend</text>
-  <text class="small" x="1012" y="571">answer</text>
-  <text class="small" x="1012" y="588">evidence</text>
-  <text class="small" x="1012" y="605">risk details</text>
+  <rect class="model" x="335" y="515" width="200" height="85" rx="6"/>
+  <text class="label" x="353" y="543">Four detector tracks</text>
+  <text class="note" x="353" y="564">Judge, RAGAS,</text>
+  <text class="note" x="353" y="581">SelfCheck-style, similarity</text>
 
-  <path class="arrow" d="M910 404 C910 455 168 465 168 520"/>
-  <path class="arrow" d="M265 575 H305"/>
-  <path class="arrow" d="M490 575 H530"/>
-  <path class="arrow" d="M750 575 H790"/>
-  <path class="arrow" d="M950 575 H990"/>
+  <rect class="model" x="605" y="515" width="200" height="85" rx="6"/>
+  <text class="label" x="623" y="543">Hybrid classifier</text>
+  <text class="detail" x="623" y="568">Logistic regression</text>
+  <text class="note" x="623" y="586">Four binary inputs</text>
 
-  <rect class="box2" x="410" y="685" width="380" height="48"/>
-  <text class="label" x="435" y="714">Human-labelled benchmark: 300 records, split 210 / 45 / 45</text>
-  <path class="dash" d="M600 685 C600 655 397 655 397 630"/>
-  <path class="dash" d="M600 685 C600 655 640 655 640 630"/>
+  <rect class="custom" x="605" y="625" width="200" height="75" rx="6"/>
+  <text class="label" x="623" y="653">Custom detector</text>
+  <text class="detail" x="623" y="678">38 features; separate model</text>
+
+  <rect class="data" x="875" y="545" width="240" height="125" rx="6"/>
+  <text class="label" x="893" y="573">Held-out results</text>
+  <text class="detail" x="893" y="598">45 test records</text>
+  <text class="detail" x="893" y="620">Metrics and figures</text>
+  <text class="note" x="893" y="643">Offline results only</text>
+
+  <path class="flow" d="M275 550 H335"/>
+  <path class="flow" d="M535 557 H605"/>
+  <path class="flow" d="M275 655 H605"/>
+  <path class="flow" d="M805 557 H845 V577 H875"/>
+  <path class="flow" d="M805 662 H845 V635 H875"/>
+  <text class="note" x="70" y="733">The custom detector is fitted separately from the four-decision hybrid classifier.</text>
+
+  <rect class="band" x="40" y="770" width="1120" height="155" rx="7"/>
+  <text class="section" x="62" y="799">4. Live hybrid prototype (separate, unvalidated input path)</text>
+  <rect class="data" x="70" y="815" width="220" height="75" rx="6"/>
+  <text class="label" x="88" y="840">Live RAG output</text>
+  <text class="detail" x="88" y="865">Stage 2 answer and evidence</text>
+  <rect class="model" x="345" y="815" width="220" height="75" rx="6"/>
+  <text class="label" x="363" y="840">Four proxy bits</text>
+  <text class="detail" x="363" y="861">Similarity and heuristic rules</text>
+  <text class="note" x="363" y="879">Not live RAGAS or SelfCheck</text>
+  <rect class="model" x="620" y="815" width="220" height="75" rx="6"/>
+  <text class="label" x="638" y="840">Saved hybrid classifier</text>
+  <text class="detail" x="638" y="865">Receives proxy bits</text>
+  <rect class="data" x="895" y="815" width="220" height="75" rx="6"/>
+  <text class="label" x="913" y="840">Prototype interface</text>
+  <text class="detail" x="913" y="865">Answer, evidence, risk</text>
+  <path class="flow" d="M290 852 H345"/>
+  <path class="flow" d="M565 852 H620"/>
+  <path class="flow" d="M840 852 H895"/>
+  <text class="note" x="70" y="913">The 45-record hybrid test metrics describe offline detector inputs, not these live proxy inputs.</text>
 </svg>

@@ -68,6 +68,7 @@ CUSTOM_SUMMARY_PATH = REPORT_DIR / "custom_training_summary.json"
 HYBRID_SUMMARY_PATH = REPORT_DIR / "hybrid_training_summary.json"
 METHOD_METRICS_PATH = REPORT_DIR / "method_metrics.csv"
 METHOD_SUMMARY_PATH = REPORT_DIR / "method_metrics.json"
+HELDOUT_PERFORMANCE_PATH = PLOT_DIR / "heldout_performance_comparison.png"
 STATISTICS_PATH = REPORT_DIR / "statistical_analysis.json"
 ABLATION_CSV_PATH = ABLATION_DIR / "ablation_study.csv"
 ABLATION_JSON_PATH = ABLATION_DIR / "ablation_study.json"
@@ -435,6 +436,24 @@ def plot_performance_bar(metrics_df: pd.DataFrame, output_path: Path) -> None:
     plt.tight_layout()
     plt.savefig(output_path, dpi=160)
     plt.close()
+
+
+def plot_heldout_performance(metrics_df: pd.DataFrame, output_path: Path) -> None:
+    ordered = metrics_df.sort_values("f1", ascending=False)
+    x = np.arange(len(ordered))
+    metrics = ("accuracy", "precision", "recall", "f1")
+    width = 0.19
+    fig, ax = plt.subplots(figsize=(11, 5.5))
+    for position, metric in enumerate(metrics):
+        ax.bar(x + (position - 1.5) * width, ordered[metric], width, label=metric.title())
+    ax.set_xticks(x, [METHOD_DISPLAY_NAMES[method] for method in ordered["method"]])
+    ax.set_ylim(0, 1.05)
+    ax.set_ylabel("Score")
+    ax.set_title(f"Detector Performance on {int(ordered['n'].iloc[0])}-Record Held-Out Test Split")
+    ax.legend(ncol=4, loc="upper center", bbox_to_anchor=(0.5, 1.0), frameon=False)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=160)
+    plt.close(fig)
 
 
 def plot_score_distribution(master: pd.DataFrame, score_col: str, output_path: Path, title: str) -> None:
@@ -1176,6 +1195,7 @@ def evaluate_all_methods(
 
     metrics_df = pd.DataFrame(metrics_rows).sort_values("f1", ascending=False)
     metrics_df.to_csv(METHOD_METRICS_PATH, index=False)
+    plot_heldout_performance(metrics_df, HELDOUT_PERFORMANCE_PATH)
 
     summary = {
         "n_test_samples": int(len(test_idx)),
